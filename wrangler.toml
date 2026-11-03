@@ -6,10 +6,10 @@ compatibility_date = "2024-11-01"
 binding = "DB"
 database_name = "pencernaan-gratis"
 # Isi dengan id dari: wrangler d1 create pencernaan-gratis
-database_id = "ISI_DENGAN_ID_D1"
+database_id = "eb271ff1-3c70-4412-9bae-e701fb583fe6"
 
 [vars]
 # Ganti dengan origin game-mu. Harus sama persis (tanpa garis miring di akhir).
-ALLOWED_ORIGIN = "https://USERNAME.github.io"
+ALLOWED_ORIGIN = "https://Destroy27.github.io"
 # "1" = papan skor global (top 10) tampil di game, "0" = sembunyikan nama dari publik.
 PAPAN_PUBLIK = "1"
