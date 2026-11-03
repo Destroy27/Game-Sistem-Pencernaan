@@ -1,0 +1,15 @@
+name = "pencernaan-gratis-api"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pencernaan-gratis"
+# Isi dengan id dari: wrangler d1 create pencernaan-gratis
+database_id = "ISI_DENGAN_ID_D1"
+
+[vars]
+# Ganti dengan origin game-mu. Harus sama persis (tanpa garis miring di akhir).
+ALLOWED_ORIGIN = "https://USERNAME.github.io"
+# "1" = papan skor global (top 10) tampil di game, "0" = sembunyikan nama dari publik.
+PAPAN_PUBLIK = "1"
