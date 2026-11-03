@@ -291,7 +291,7 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
     gambarSuara();
   }
 
-  var API = 'https://NAMA-WORKER.USERNAME.workers.dev'; // ganti dengan URL Worker-mu
+  var API = 'https://pencernaan-gratis-api.jejak7-api.workers.dev';
   var SESSION = 'pcn_guru_session';
   var state = { token: '', user: null, murid: [], soal: [], rekap: null, filter: '' };
 
@@ -848,6 +848,18 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
     a.click();
     a.remove();
   };
+
+  function salin(text, pesan, gagal) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(function () {
+        toast(pesan || ('Disalin: ' + text));
+      }).catch(function () {
+        toast(gagal || ('Gagal menyalin otomatis. Salin manual: ' + text));
+      });
+    }
+    toast('Salin manual: ' + text);
+    return Promise.resolve();
+  }
 
   // ---------- Mulai ----------
   async function boot() {

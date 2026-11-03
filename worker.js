@@ -5,7 +5,7 @@ const AMBANG_GAGAL = 30;   // % jawaban 0 poin per organ, materi perlu diulas
 const AMBANG_RATA = 250;   // rata-rata skor per siswa di bawah ini perlu pendampingan
 const MIN_SESI = 2;        // minimal sesi sebelum siswa disorot
 // Alamat halaman guru (ganti USERNAME dan NAMA-REPO dengan milikmu).
-const ADMIN_URL = 'https://USERNAME.github.io/NAMA-REPO/admin.html';
+const ADMIN_URL = 'https://destroy27.github.io/Game-Sistem-Pencernaan/admin.html';
 async function sha256(s) {
   const b = new TextEncoder().encode(s);
   const h = await crypto.subtle.digest('SHA-256', b);
