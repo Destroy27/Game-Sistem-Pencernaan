@@ -126,7 +126,6 @@ select{padding:8px;border-radius:12px;border:3px solid var(--soft);background:va
 </div>
 <div id="lb"></div>
 <a class="btn ghost kecil" href="index.html" style="margin-top:12px;text-decoration:none;display:inline-block">🏠 Menu Utama</a>
-<p class="sub" style="margin-top:10px;font-size:.72rem;opacity:.7">© Destroy27 &amp; Gede Pasek Ary Sugiantara</p>
 </div></section>
 <section id="s-start" class="screen">
  <h1>🍽️ Petualangan Makanan</h1>
@@ -252,7 +251,7 @@ $('vtoken').onclick=async()=>{
   try{
     const r=await fetchTimeout(API_URL+'/api/token/validate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kode})},10000);
     const d=await r.json();
-    if(!r.ok||!d.tenant){$('lm').textContent='Token tidak valid atau kedaluwarsa.';SFX.bad();return}
+    if(!r.ok||!d.tenant){$('lm').textContent='Token tidak valid.';SFX.bad();return}
     currentToken=kode;currentTenant=d.tenant||'';
     const sr=await fetchTimeout(API_URL+'/api/siswa?token='+encodeURIComponent(kode),{},10000);
     const sd=await sr.json();
@@ -263,8 +262,7 @@ $('vtoken').onclick=async()=>{
     if(!list.length)sel.value='__new__';
     toggleNewBox();
     $('studentPick').style.display='block';
-    const exp=d.expires_at?String(d.expires_at).slice(0,16):'';
-    $('lm').textContent='Token valid'+(exp?' sampai '+exp:'')+(list.length?'. Pilih namamu lalu masuk.':'. Isi namamu lalu masuk.');
+    $('lm').textContent='Token valid'+(list.length?'. Pilih namamu lalu masuk.':'. Isi namamu lalu masuk.');
     SFX.ok();
   }catch(e){
     currentToken='';currentTenant='';currentStudents=[];

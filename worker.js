@@ -40,13 +40,11 @@ export default {
     const reqOrigin = req.headers.get('Origin');
     if (origin !== '*' && reqOrigin && reqOrigin !== origin) return J({ e: 'origin' }, 403);
 
-    async function tokenTenant(kode, abaikanKedaluwarsa = false) {
+    async function tokenTenant(kode) {
       if (!kode) return '';
       try {
-        const sql = abaikanKedaluwarsa
-          ? 'SELECT tenant FROM token WHERE kode=?'
-          : "SELECT tenant FROM token WHERE kode=? AND expires_at >= datetime('now','+8 hours')";
-        const r = await env.DB.prepare(sql).bind(String(kode).toUpperCase()).first();
+        const r = await env.DB.prepare('SELECT tenant FROM token WHERE kode=?')
+          .bind(String(kode).toUpperCase()).first();
         return r ? (r.tenant || '') : '';
       } catch (e) {
         return '';
@@ -482,10 +480,10 @@ export default {
       if (!kode) return J({ e: 'data' }, 400);
       try {
         const r = await env.DB.prepare(
-          "SELECT tenant,expires_at FROM token WHERE kode=? AND expires_at >= datetime('now','+8 hours')"
+          'SELECT tenant FROM token WHERE kode=?'
         ).bind(kode).first();
         if (!r) return J({ e: 'token' }, 404);
-        return J({ ok: 1, tenant: r.tenant, expires_at: r.expires_at });
+        return J({ ok: 1, tenant: r.tenant });
       } catch (e) {
         return J({ e: 'db' }, 500);
       }
@@ -497,9 +495,9 @@ export default {
       const tenant = ctx.tenant != null ? ctx.tenant : '';
       try {
         const lama = await env.DB.prepare(
-          "SELECT kode,expires_at FROM token WHERE tenant=? AND expires_at >= datetime('now','+8 hours') ORDER BY id DESC LIMIT 1"
+          'SELECT kode FROM token WHERE tenant=? ORDER BY id DESC LIMIT 1'
         ).bind(tenant).first();
-        if (lama) return J({ ok: 1, kode: lama.kode, expires_at: lama.expires_at, lama: 1 });
+        if (lama) return J({ ok: 1, kode: lama.kode, lama: 1 });
 
         let kode = '';
         for (let i = 0; i < 6; i++) {
@@ -509,10 +507,9 @@ export default {
         }
         if (!kode) return J({ e: 'db' }, 500);
         await env.DB.prepare(
-          "INSERT INTO token(tenant,kode,expires_at) VALUES(?,?,datetime('now','+8 hours','+1 day'))"
+          'INSERT INTO token(tenant,kode) VALUES(?,?)'
         ).bind(tenant, kode).run();
-        const row = await env.DB.prepare('SELECT expires_at FROM token WHERE kode=?').bind(kode).first();
-        return J({ ok: 1, kode, expires_at: row?.expires_at || '' });
+        return J({ ok: 1, kode });
       } catch (e) {
         return J({ e: 'db' }, 500);
       }
@@ -524,7 +521,7 @@ export default {
       const tenant = ctx.tenant != null ? ctx.tenant : '';
       try {
         const r = await env.DB.prepare(
-          "SELECT kode,expires_at FROM token WHERE tenant=? AND expires_at >= datetime('now','+8 hours') ORDER BY id DESC"
+          'SELECT kode FROM token WHERE tenant=? ORDER BY id DESC'
         ).bind(tenant).all();
         return J({ list: r.results || [] });
       } catch (e) {

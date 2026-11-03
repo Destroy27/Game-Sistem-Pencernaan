@@ -138,7 +138,7 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
       <b style="color:var(--ink)">Cara mulai:</b><br>
       1. Isi nama dan PIN, lalu klik <b>Buat Akun Guru</b>.<br>
       2. Tambahkan data murid.<br>
-      3. Buat token harian, lalu bagikan ke siswa.
+      3. Buat token akses, lalu bagikan ke siswa.
     </div>
   </form>
 
@@ -158,7 +158,7 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
     <h2>📋 Panduan Langkah demi Langkah</h2>
     <ol style="padding-left:18px;margin:8px 0 0;font-size:.88rem;color:var(--ink);line-height:1.7">
       <li><b>Data murid:</b> Tambahkan satu-satu, tempel banyak sekaligus, atau biarkan siswa mengisi namanya sendiri di game.</li>
-      <li><b>Buat token:</b> Klik "Buat token hari ini" di kartu Token Akses Siswa.</li>
+      <li><b>Buat token:</b> Klik "Buat token kelas" di kartu Token Akses Siswa.</li>
       <li><b>Bagikan token:</b> Tulis kode token 6 karakter di papan tulis, siswa masukkan di game.</li>
       <li><b>Lihat nilai:</b> Klik "Muat rekap" di kartu Rekap Nilai untuk melihat hasil siswa.</li>
     </ol>
@@ -168,8 +168,8 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
   <div class="grid">
     <section class="card">
       <h2>🎟️ Token Akses Siswa (Bagikan ke Murid)</h2>
-      <p class="sub">Token ini dipakai siswa untuk masuk ke game. Satu token berlaku untuk semua murid, sampai besok.</p>
-      <button class="pri" id="btnToken" type="button">Buat token hari ini</button>
+      <p class="sub">Token ini dipakai siswa untuk masuk ke game. Satu token berlaku untuk semua murid.</p>
+      <button class="pri" id="btnToken" type="button">Buat token kelas</button>
       <div id="tokenBox"></div>
     </section>
 
@@ -251,11 +251,6 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
   </section>
 </section>
 
-<footer>
-  <p id="copySecret" style="user-select:none">&copy; Destroy27 &amp; Gede Pasek Ary Sugiantara</p>
-</footer>
-
-
 <div class="toast" id="toast"></div>
 </div>
 
@@ -305,7 +300,7 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
     unauthorized: 'Sesi habis. Silakan masuk lagi.',
     db: 'Server sedang bermasalah. Coba lagi sebentar.',
     origin: 'Akses ditolak. Buka halaman dari link resmi.',
-    token: 'Token tidak valid atau kedaluwarsa.',
+    token: 'Token tidak valid.',
     siswa: 'Murid tidak ditemukan.',
     json: 'Data tidak terbaca.',
     role: 'Peran tidak dikenal.',
@@ -645,13 +640,12 @@ header{background:linear-gradient(135deg,var(--pri),#f0a06a 55%,var(--lemon));bo
       var d = await api('/api/token/list');
       var list = Array.isArray(d.list) ? d.list : [];
       if (!list.length) {
-        $('tokenBox').innerHTML = '<p class="empty">Belum ada token aktif hari ini.</p>';
+        $('tokenBox').innerHTML = '<p class="empty">Belum ada token kelas.</p>';
         return;
       }
       var t = list[0];
       $('tokenBox').innerHTML = '<div class="tokenBox"><div class="hint">Token akses siswa</div>' +
         '<div class="tokenCode">' + esc(t.kode) + '</div>' +
-        '<div class="hint">Berlaku sampai ' + esc(waktu(t.expires_at)) + ' WITA</div>' +
         '<button class="ghost small" type="button" id="btnCopyToken" style="margin-top:8px">Salin token</button></div>';
       $('btnCopyToken').onclick = function () { salin(t.kode); };
     } catch (err) {
